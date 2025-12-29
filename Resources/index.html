@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Server Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Available Resources</h1>
+        <p>Select a file to download or view:</p>
+        
+        <div class="file-list">
+            <div class="file-item">
+                <span class="file-name">first.txt</span>
+                <a href="/first.txt" class="btn">Get File</a>
+            </div>
+            <div class="file-item">
+                <span class="file-name">index.html</span>
+                <a href="/index.html" class="btn">Get File</a>
+            </div>
+             <div class="file-item">
+                <span class="file-name">style.css</span>
+                <a href="/style.css" class="btn">Get File</a>
+            </div>
+             <div class="file-item">
+                <span class="file-name">script.js</span>
+                <a href="/script.js" class="btn">Get File</a>
+            </div>
+        </div>
+        
+        <div id="status-area"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
