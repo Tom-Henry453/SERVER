@@ -939,3 +939,71 @@
 [2025-12-29 04:57:35][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 59010
 [2025-12-29 04:57:35][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 57083
 [2025-12-29 04:59:31][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 57083
+[2025-12-29 05:44:26][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 49719
+[2025-12-29 05:44:26][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 57069
+[2025-12-29 05:45:27][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 57069
+[2025-12-29 13:46:17][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 62515
+[2025-12-29 13:46:17][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 55773
+[2025-12-29 13:46:17][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 59423
+[2025-12-29 13:46:17][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 55412
+[2025-12-29 13:46:17][ERROR][SERVER.cpp:288 void handle_client(int, const sockaddr_in&, Logger&)] requested Resourse Not found | Client IP: 172.22.128.1 Port: 55412
+[2025-12-29 13:46:26][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 55875
+[2025-12-29 13:46:26][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 53282
+[2025-12-29 13:48:55][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 53282
+[2025-12-29 14:15:15][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 50542
+[2025-12-29 14:15:15][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 63697
+[2025-12-29 14:15:15][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 62171
+[2025-12-29 14:15:16][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 54803
+[2025-12-29 14:15:16][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 49670
+[2025-12-29 14:15:16][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 59976
+[2025-12-29 14:15:17][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 62753
+[2025-12-29 14:15:17][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 60202
+[2025-12-29 14:16:14][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 58572
+[2025-12-29 14:16:14][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 65534
+[2025-12-29 14:16:19][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 60202
+[2025-12-29 14:16:44][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 58572
+[2025-12-29 14:16:44][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 65534
+[2025-12-29 14:25:32][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 59484
+[2025-12-29 14:25:32][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 52206
+[2025-12-29 14:25:32][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 53894
+[2025-12-29 14:25:40][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 51782
+[2025-12-29 14:25:43][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 64763
+[2025-12-29 14:26:02][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 53894
+[2025-12-29 14:26:02][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 52206
+[2025-12-29 14:26:02][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 65008
+[2025-12-29 14:26:02][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 51545
+[2025-12-29 14:26:09][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 61843
+[2025-12-29 14:26:09][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 49293
+[2025-12-29 14:26:13][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 64763
+[2025-12-29 14:27:22][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 49293
+[2025-12-29 15:18:07][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 60135
+[2025-12-29 15:18:07][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 54306
+[2025-12-29 15:19:14][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 54306
+[2025-12-29 15:20:55][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 55366
+[2025-12-29 15:20:55][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 51622
+[2025-12-29 15:20:55][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 53729
+[2025-12-29 15:20:55][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 55366
+[2025-12-29 15:20:55][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 53729
+[2025-12-29 15:20:55][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 51622
+[2025-12-29 15:20:55][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 59290
+[2025-12-29 15:20:55][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 59290
+[2025-12-29 15:20:55][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 64890
+[2025-12-29 15:20:56][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 64890
+[2025-12-29 15:20:56][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 63960
+[2025-12-29 15:21:14][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 56326
+[2025-12-29 15:21:14][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 65455
+[2025-12-29 15:21:14][ERROR][SERVER.cpp:288 void handle_client(int, const sockaddr_in&, Logger&)] requested Resourse Not found | Client IP: 172.22.128.1 Port: 65455
+[2025-12-29 15:21:26][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 63960
+[2025-12-29 15:21:46][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 53500
+[2025-12-29 15:21:46][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 59767
+[2025-12-29 15:22:00][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 59767
+[2025-12-29 15:22:08][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 65451
+[2025-12-29 15:22:08][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 60997
+[2025-12-29 15:22:08][ERROR][SERVER.cpp:288 void handle_client(int, const sockaddr_in&, Logger&)] requested Resourse Not found | Client IP: 172.22.128.1 Port: 65451
+[2025-12-29 15:23:09][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 60997
+[2025-12-29 16:31:56][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 54215
+[2025-12-29 16:31:56][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 53535
+[2025-12-29 16:33:17][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 53535
+[2025-12-29 16:33:17][ERROR][SERVER.cpp:268 void handle_client(int, const sockaddr_in&, Logger&)] INVALID_REQUEST | Client IP: 172.22.128.1 Port: 54215
+[2025-12-29 17:05:54][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 57807
+[2025-12-29 17:05:54][INFO][SERVER.cpp:348 int main()] Client Connected Successfully | Client IP: 172.22.128.1 Port: 49923

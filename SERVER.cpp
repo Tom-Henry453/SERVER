@@ -177,17 +177,26 @@ std::string get_mime_type(const std::filesystem::path& p){
 
 std::pair<bool,std::filesystem::path> is_path_safe(const std::filesystem::path& requested_path, const std::filesystem::path& root_folder=ROOT_FOLDER){
     namespace fs = std::filesystem;
-    auto doc_root = fs::weakly_canonical(root_folder);
-    auto full = doc_root / requested_path;
-    auto full_sanitized = std::filesystem::weakly_canonical(full);
-    auto abs_doc_root = std::filesystem::absolute(doc_root);
-    auto abs_resolved = std::filesystem::absolute(full_sanitized);
-    auto rel = std::filesystem::relative(abs_resolved, abs_doc_root);
-    // If relative path starts with "..", it escaped!
-    if(!rel.empty() && rel.string().find("..") == 0){
+    try{
+        auto doc_root = fs::weakly_canonical(root_folder);
+        auto full = doc_root / requested_path;
+        auto full_sanitized = std::filesystem::weakly_canonical(full);
+        auto rel = std::filesystem::relative(full_sanitized, doc_root);
+        // If relative path starts with "..", it escaped!
+        if(!rel.empty() && rel.string().find("..") == 0 || full_sanitized.string().find(doc_root.string()) != 0){
+            return {false, ""};
+        }
+        // Path is safe, return the full sanitized path.
+        if(rel.is_not_a_directory()){
+            return {true, full_sanitized};
+        }
+        else{
+            return {true, full_sanitized};
+        }
+    }
+    catch(...){
         return {false, ""};
     }
-    return {true, full_sanitized}; 
 }
 
 bool open_file(std::filesystem::path path, string &buffer){
@@ -197,7 +206,7 @@ bool open_file(std::filesystem::path path, string &buffer){
         return false;
     }
     file.seekg(0, ios::end);
-    size_t file_size = file.tellg(); 
+    size_t file_size = file.tellg();// give the location of file pointer
     file.seekg(0, ios::beg);
     buffer.resize(file_size);
     file.read(buffer.data(), file_size);
@@ -206,29 +215,20 @@ bool open_file(std::filesystem::path path, string &buffer){
 
 std::optional<std::filesystem::path> map_request_to_file(http_request& request){
     namespace fs = std::filesystem;
-    fs::path root(ROOT_FOLDER); 
-    
-    std::string path_str = request.path;
-    if (!path_str.empty() && path_str.front() == '/') {
-        path_str.erase(0, 1);
+    // Normalize the path to handle oddities like "//" or "/./"
+    fs::path requested_path= fs::path(request.path).lexically_normal();
+    // Make it a purely relative path by removing any leading slash.
+    requested_path = requested_path.relative_path(); // remove leading slash like /index.html to index.html
+    // If the path is nowempty or just a dot, it's a request for the root. Serve index.html.
+    if (requested_path.empty() || requested_path == ".") {
+        requested_path = "index.html";
     }
-    if (path_str.empty()) {
-        path_str = "index.html";
-    }
-
-    fs::path requested_path = fs::path(path_str).lexically_normal();
-    
-    if (requested_path == "." || requested_path == "/") {
-         requested_path = "index.html";
-    }
-
-    auto [is_safe, local_file_path] = is_path_safe(requested_path, root);
-    if(!is_safe){
-        return std::nullopt; 
-    }
+    auto [is_safe, local_file_path] = is_path_safe(requested_path);
+    is_safe  =
+    if(!is_safe)
+        return std::nullopt;
     return local_file_path;
 }
-
 std::string build_http_response(STATUS_CODES status= STATUS_CODES::OK, const std::string& file_buffer="", const std::string& mime_type="text/html"){
     std::string response;
     std::string status_line;
@@ -261,7 +261,6 @@ std::string build_http_response(STATUS_CODES status= STATUS_CODES::OK, const std
 }
 
 void handle_client(int client_fd, const struct sockaddr_in& client_addr, Logger& logs){
-    
     auto [read_status, raw_request] = read_request(client_fd);
     if(!read_status){
         close(client_fd); 
@@ -274,7 +273,6 @@ void handle_client(int client_fd, const struct sockaddr_in& client_addr, Logger&
         logs.add_log(9, client_addr, LogLevel::ERROR);
         return;
     }
-
     auto requested_file_path_opt = map_request_to_file(req_obj);
     if(!requested_file_path_opt){
         logs.add_log(10, client_addr, LogLevel::ERROR);
