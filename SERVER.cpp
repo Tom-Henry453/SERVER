@@ -16,7 +16,7 @@
 #include <filesystem>
 #include <optional>
 #include <algorithm>
-
+ #include <fcntl.h>
 #define DEBUG_MODE 0
 #define MAX_SIZE_REQUEST 1024 * 1024 // 1 MB 
 #define ROOT_FOLDER "Resources/"
@@ -51,14 +51,13 @@ inline std::string trim(const std::string& s) {
     if (start == std::string::npos || end == std::string::npos) return "";
     return s.substr(start, end - start + 1);
 }
-
 std::pair<int,string> read_request(int client_fd){
     char buffer[4096] ;// 1 KB Chunk on stack
     std::string request{};
     int header_ending_idx = -1;
     while(true){
         ssize_t bytes_from_socket=recv(client_fd,buffer,sizeof(buffer),0);
-        if(bytes_from_socket <=  0){ // Client closed  its TCP connection 
+        if(bytes_from_socket ==  0){ // Client closed  its TCP connection 
             return {0,request};  // no more bytes will ever reach
         }
         request.append(buffer,bytes_from_socket);
@@ -187,7 +186,7 @@ std::pair<bool,std::filesystem::path> is_path_safe(const std::filesystem::path& 
             return {false, ""};
         }
         // Path is safe, return the full sanitized path.
-        if(rel.is_not_a_directory()){
+        if(is_directory(full_sanitized)){
             return {true, full_sanitized};
         }
         else{
@@ -224,7 +223,6 @@ std::optional<std::filesystem::path> map_request_to_file(http_request& request){
         requested_path = "index.html";
     }
     auto [is_safe, local_file_path] = is_path_safe(requested_path);
-    is_safe  =
     if(!is_safe)
         return std::nullopt;
     return local_file_path;
@@ -334,9 +332,8 @@ int main() {
     Logger& logs = Logger::getInstance("Logs.txt");
     while(true)
     {
-            struct sockaddr_in client{}; 
-            socklen_t client_len = sizeof(client);
-        
+        struct sockaddr_in client{}; 
+        socklen_t client_len = sizeof(client);
         int client_fd = accept(server_fd, (struct sockaddr *) &client, (socklen_t *) &client_len);
         if(client_fd < 0){
             logs.add_log(6, client, LogLevel::ERROR);
@@ -348,11 +345,12 @@ int main() {
                 std::cout<<"Client connected successfully! IP =  "<<std::to_string(client.sin_addr.s_addr);
             }
         }
-        
         std::thread client_thread(handle_client, client_fd, client, std::ref(logs));
-        client_thread.detach(); 
+        client_thread.detach(); // Detach the thread to allow independent execution
     }
     close(server_fd);
+    // kill all threads
+    
     
     return 0;
 }

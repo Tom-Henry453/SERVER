@@ -9,7 +9,7 @@
 #include <ctime>
 #include <unordered_map>
 #include <source_location> // C++20 feature for automatic file/line logging
-
+using namespace std;
 // Enum to define different levels of logging
 enum class LogLevel {
     INFO,
@@ -96,7 +96,7 @@ std::unordered_map<int, std::string> Logger::ERRORS = {
     {7,"Connection closed by server after sending response"},
     {8,"Client Connected Successfully"},
     {9,"INVALID_REQUEST"},
-    {10,"requested Resourse Not found"}
+    {10,"Requested Resourse Not found"}
     // Add more error codes and messages as needed
 };
 // A simple macro to make logging even easier
