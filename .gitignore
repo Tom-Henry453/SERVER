@@ -1,3 +1,17 @@
 *.exe
-*./vscode
+.vscode/
 *old.txt
+notes/
+plans/
+# ignore cliet.hh , server.hh and HTTP_request.hh because they are header files and not compiled directly
+!client.hh
+!server.hh
+!HTTP_request.hh
+# ignore log files
+!*.log
+!*CLAUDE.md
+*.claudeignore
+tests/
+vault/
+archive/
+!logs.txt
