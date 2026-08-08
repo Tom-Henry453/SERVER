@@ -19,3 +19,6 @@ thread_pool.hh
 __pycache__/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+/SERVER
+/server
+/server_fixed
