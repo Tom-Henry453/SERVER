@@ -87,16 +87,18 @@ private:
     static std::unordered_map<int, std::string> ERRORS; // Map to store different error messages
 };
 std::unordered_map<int, std::string> Logger::ERRORS = {
-    {1, "Connection error"},
-    {2, "Timeout error"},
-    {3, "Data transmission error"},
-    {4,"Invalid request"},
-    {5,"Resource not found"},
-    {6,"Could Not create socket for client(server side)"},
-    {7,"Connection closed by server after sending response"},
-    {8,"Client Connected Successfully"},
-    {9,"INVALID_REQUEST"},
-    {10,"Requested Resourse Not found"}
+    {1, "Client closed the connection"},
+    {2, "ERROR occurred while receiving request"},
+    {3, "REQUEST SIZE EXCEEDED MAX LIMIT"},
+    {4, "Malformed REQUEST"},
+    {5, "Empty key or value in header"},
+    {6, "Could not create socket for client (server side)"},
+    {7, "Connection closed by server after sending response"},
+    {8, "Client connected successfully"},
+    {9, "Invalid request"},
+    {10, "Requested resource not allowed or not found"},
+    {11,"TIME OUT receiving request from client"},
+    {12,"TIME OUT sending response to client"}
     // Add more error codes and messages as needed
 };
 // A simple macro to make logging even easier

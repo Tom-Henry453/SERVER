@@ -2,8 +2,8 @@
 #include <unordered_set>
 #include <string_view>
 
-#define recv_timeout_sec 3 // time out limit for the client
-#define send_timeout_sec 2
+#define DEFAULT_RECV_TIMEOUT_SEC 3 // time out limit for the client
+#define DEFAULT_SEND_TIMEOUT_SEC 2
 
 #define REQUEST_TIMEOUT 8  // 8 seconds to receive the request from the client
 #define MAX_REQUEST_SIZE 1024*1024     // 1 MB
@@ -17,8 +17,6 @@
 // #define POST_REQUIRE_CONTENT_LENGTH  true
 #define ROOT_FOLDER "Resources/"    
 // HTTP Methods and other related constants
-#define MAX_THREADS
-// 
 inline const std::unordered_set<std::string_view> ALLOWED_METHODS = {"GET"};
 enum class SUPPORTED_HTTP_METHODS{
     GET,

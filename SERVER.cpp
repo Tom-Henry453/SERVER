@@ -21,6 +21,7 @@
 #define DEBUG_MODE 0
 #include<configs.hh>
 #include<HTTP_request.hh>
+#include<thread_pool.hh>
 using namespace std;
 
 std::string get_mime_type(const std::filesystem::path& p){
@@ -130,7 +131,7 @@ std::string build_http_response(STATUS_CODES status= STATUS_CODES::OK, const std
 
 void handle_client(int client_fd, const struct sockaddr_in& client_addr, Logger& logs){
     // set timeout on the client socket to mitigate slowris attacks
-     utils::set_socket_timeout(client_fd,recv_timeout_sec,send_timeout_sec);
+     utils::set_socket_timeout(client_fd,DEFAULT_RECV_TIMEOUT_SEC,DEFAULT_SEND_TIMEOUT_SEC);
     auto raw_request = http_request::receive_request(client_fd);
     if(!raw_request){
         close(client_fd);
@@ -233,8 +234,7 @@ int main() {
                 std::cout<<"Client connected successfully! IP =  "<<std::to_string(client.sin_addr.s_addr);
             }
         std::thread client_thread(handle_client, client_fd, client, std::ref(logs));
-        client_thread.detach(); // detach the thread to allow it to run independently
-        // bad behavior fixed in future 
+        client_thread.detach(); 
     }
     close(server_fd);
     

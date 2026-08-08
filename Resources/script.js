@@ -1,8 +1,22 @@
 console.log("Dashboard loaded");
 
-document.querySelectorAll('.btn').forEach(button => {
+const statusArea = document.getElementById('status-area');
+const buttons = document.querySelectorAll('.btn');
+
+// Handle standard mouse/click interactions ONLY
+buttons.forEach(button => {
     button.addEventListener('click', (e) => {
-        // Optional: Intercept click to show animation or log
-        console.log(`Requesting ${e.target.getAttribute('href')}...`);
+        
+        // Extract the filename from the href for our UI status update
+        const fileName = e.currentTarget.getAttribute('href').replace('/', '');
+        console.log(`Downloading ${fileName}...`);
+        
+        // Update the UI to show action
+        statusArea.textContent = `Downloading ${fileName}...`;
+        
+        // Reset status text after 2 seconds
+        setTimeout(() => {
+            statusArea.textContent = '';
+        }, 2000);
     });
 });

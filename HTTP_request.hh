@@ -61,7 +61,7 @@ public:
     */
     static std::expected<std::string,int> receive_request (const int client_fd){
         auto start_time = std::chrono::steady_clock::now(); // record start time
-        auto check_timeout = [&start_time](auto &curr_time, auto timeout_duration){
+        auto check_timeout = [&start_time](const auto &curr_time, auto timeout_duration){
             return (curr_time - start_time) >= timeout_duration;
         };
         char buffer[4096] ;// 1 KB Chunk on stack

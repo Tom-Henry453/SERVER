@@ -8,10 +8,14 @@ plans/
 !server.hh
 !HTTP_request.hh
 # ignore log files
-!*.log
+*.log
+Logs.txt
 !*CLAUDE.md
 *.claudeignore
 tests/
 vault/
 archive/
-!logs.txt
+thread_pool.hh
+__pycache__/
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

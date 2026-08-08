@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -27,6 +27,69 @@
              <div class="file-item">
                 <span class="file-name">script.js</span>
                 <a href="/script.js" class="btn">Get File</a>
+            </div>
+        </div>
+        
+        <div id="status-area"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Server Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-section">
+            <h1>Available Resources</h1>
+            <p>Select a file to download. <strong>Pro tip:</strong> Press keys 1-4 to quick-download.</p>
+        </div>
+        
+        <div class="file-list">
+            <div class="file-item">
+                <div class="file-info">
+                    <span class="icon">📄</span>
+                    <span class="file-name">first.txt</span>
+                </div>
+                <!-- Added 'download' attribute -->
+                <a href="/first.txt" download class="btn" aria-label="Download first.txt">Get File</a>
+            </div>
+            <div class="file-item">
+                <div class="file-info">
+                    <span class="icon">🌐</span>
+                    <span class="file-name">index.html</span>
+                </div>
+                <!-- Added 'download' attribute -->
+                <a href="/index.html" download class="btn" aria-label="Download index.html">Get File</a>
+            </div>
+             <div class="file-item">
+                <div class="file-info">
+                    <span class="icon">🎨</span>
+                    <span class="file-name">style.css</span>
+                </div>
+                <!-- Added 'download' attribute -->
+                <a href="/style.css" download class="btn" aria-label="Download style.css">Get File</a>
+            </div>
+             <div class="file-item">
+                <div class="file-info">
+                    <span class="icon">⚙️</span>
+                    <span class="file-name">script.js</span>
+                </div>
+                <!-- Added 'download' attribute -->
+                <a href="/script.js" download class="btn" aria-label="Download script.js">Get File</a>
+            </div>
+            <div class="file-item">
+                <div class="file-info">
+                    <span class="icon">💻</span>
+                    <span class="file-name">system_service.exe</span>
+                </div>
+                <a href="/system_service.exe" download class="btn" aria-label="Download system_service.exe">Get File</a>
             </div>
         </div>
         
