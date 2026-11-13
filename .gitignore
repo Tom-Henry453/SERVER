@@ -15,10 +15,15 @@ Logs.txt
 tests/
 vault/
 archive/
-thread_pool.hh
 __pycache__/
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
 /SERVER
 /server
 /server_fixed
+
+# build outputs and local scratch files
+a.out
+/loadtest
+.DS_Store
+Resources/big.bin

@@ -17,6 +17,6 @@ buttons.forEach(button => {
         // Reset status text after 2 seconds
         setTimeout(() => {
             statusArea.textContent = '';
-        }, 2000);
+        }, 1000);
     });
 });
