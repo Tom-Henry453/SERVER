@@ -6,22 +6,24 @@
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<arpa/inet.h>
-#include<netdb.h> 
+#include<netdb.h>
 #include <mutex>
 #include<thread>
 #include"Logger.hh"
 #include<sstream>
-#include <fstream>
+#include<fstream>
 #include<unordered_map>
 #include<filesystem>
 #include<expected>
 #include<algorithm>
 #include<fcntl.h>
 #include<string_view>
+#include<atomic>
+#include<ctime>
 #define DEBUG_MODE 0
-#include<configs.hh>
-#include<HTTP_request.hh>
-#include<thread_pool.hh>
+#include"CONFIGS.hh"
+#include"HTTP_request.hh"
+#include"thread_pool.hh"
 using namespace std;
 
 std::string get_mime_type(const std::filesystem::path& p){
@@ -43,15 +45,15 @@ std::string get_mime_type(const std::filesystem::path& p){
 }
 
 std::pair<bool,std::filesystem::path> is_path_safe(const std::filesystem::path& requested_path, const std::filesystem::path& root_folder=ROOT_FOLDER){
-    namespace fs = std::filesystem; // for easier access 
-    //canonical path: an absolute path that includes no symlinks, "." or ".." elements.   
+    namespace fs = std::filesystem; // for easier access
+    //canonical path: an absolute path that includes no symlinks, "." or ".." elements.
     try{
-        auto doc_root = fs::canonical(root_folder); // get absolute path of root folder and resolve any symlinksm and possibly 
+        auto doc_root = fs::canonical(root_folder); // get absolute path of root folder and resolve any symlinksm and possibly
         auto full = doc_root / requested_path; // concatenate requested path with root folder
-        auto full_sanitized = std::filesystem::canonical(full); // 
-        auto rel = std::filesystem::relative(full_sanitized, doc_root); // 
+        auto full_sanitized = std::filesystem::canonical(full); //
+        auto rel = std::filesystem::relative(full_sanitized, doc_root); //
         // If relative path starts with "..", it escaped!
-        if( rel.string().starts_with("..") ){  // escapde the root folder probably unsafe to server 
+        if( rel.string().starts_with("..") ){  // escapde the root folder probably unsafe to server
             return {false, ""};
         }
         // Path is safe, return the full sanitized path.
@@ -132,6 +134,7 @@ std::string build_http_response(STATUS_CODES status= STATUS_CODES::OK, const std
 void handle_client(int client_fd, const struct sockaddr_in& client_addr, Logger& logs){
     // set timeout on the client socket to mitigate slowris attacks
      utils::set_socket_timeout(client_fd,DEFAULT_RECV_TIMEOUT_SEC,DEFAULT_SEND_TIMEOUT_SEC);
+     utils::configure_socket(client_fd);
     auto raw_request = http_request::receive_request(client_fd);
     if(!raw_request){
         close(client_fd);
@@ -155,7 +158,7 @@ void handle_client(int client_fd, const struct sockaddr_in& client_addr, Logger&
         close(client_fd);
         return;
     }
-    
+
     auto requested_file_path_opt = map_request_to_file(parsed_request.value());
     if(!requested_file_path_opt){
         logs.add_log(10, client_addr, LogLevel::ERROR);
@@ -174,7 +177,6 @@ void handle_client(int client_fd, const struct sockaddr_in& client_addr, Logger&
     }
     std::string mime_type = get_mime_type(requested_file_path_opt.value());
     string final_response = build_http_response(STATUS_CODES::OK, file_buffer, mime_type);
-
     send(client_fd, final_response.c_str(), final_response.size(), 0);
     close(client_fd);
     return ;
@@ -194,21 +196,19 @@ void start_server(struct sockaddr_in& server_addr, int& server_fd){
     server_addr.sin_family = AF_INET; // IPv4
     server_addr.sin_addr.s_addr = INADDR_ANY; // listen on all available interfaces
     server_addr.sin_port = htons(4221); // port number in network byte order
-    if( bind(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr)) != 0){
+    if( ::bind(server_fd, (struct sockaddr*) &server_addr, sizeof(server_addr)) != 0){
         throw std::runtime_error("bind failed");
     }
     // now call listen on the server socket to start listening for incoming connections. The second argument specifies the maximum number of pending connections that can be queued up before the kernel starts rejecting new ones.
-    int connection_backlog = 128;
+    int connection_backlog =  4096 ; // maximum number of pending connections
     if(listen(server_fd, connection_backlog) != 0){
         throw std::runtime_error("listen failed");
     }
 }
-
 int main() {
-    std::cout << std::unitbuf;
-    std::cerr << std::unitbuf;
+    #if DEBUG_MODE
     std::cout << "Logs from your program will appear here!\n";
-
+    #endif
     struct sockaddr_in server_addr; int server_fd;
     try{
         start_server(server_addr, server_fd);
@@ -217,26 +217,32 @@ int main() {
         cerr << "Error starting server: "<<e.what()<< endl;
         return 1;
     }
-
+    #if DEBUG_MODE
     std::cout<<"Waiting for a client to connect...\n";
+    #endif
     Logger& logs = Logger::getInstance("Logs.txt");
+    thread_pool<LogEntry> log_queue(1,2000);
+    thread_pool<task> worker_pool(4,8000);
     while(true)
     {
-        struct sockaddr_in client{}; 
-        socklen_t client_len = sizeof(client);
-        int client_fd = accept(server_fd, (struct sockaddr *) &client, (socklen_t *) &client_len);
+        struct sockaddr_in client_addr{};
+        socklen_t client_len = sizeof(client_addr);
+        int client_fd =accept(server_fd,(struct sockaddr *)&client_addr,(socklen_t *)&client_len);
         if(client_fd < 0){
-            logs.add_log(6, client, LogLevel::ERROR);
-            continue; 
+            log_queue.enqueue(LogEntry{6, client_addr, LogLevel::ERROR});
+            continue;
         }
-        logs.add_log(8, client, LogLevel::INFO); 
-            if(DEBUG_MODE){
-                std::cout<<"Client connected successfully! IP =  "<<std::to_string(client.sin_addr.s_addr);
-            }
-        std::thread client_thread(handle_client, client_fd, client, std::ref(logs));
-        client_thread.detach(); 
+        log_queue.enqueue(LogEntry{8, client_addr, LogLevel::INFO});
+            #if DEBUG_MODE
+            std::cout<<"Client connected successfully! IP =  "<<std::to_string(client_addr.sin_addr.s_addr);
+            #endif
+            auto closure = [ client_fd , client_addr , log=std::ref(logs) ] (){
+                handle_client(client_fd, client_addr, log.get() );
+            };
+            // add the task
+            worker_pool.enqueue( task{ std::move(closure) } );
     }
     close(server_fd);
-    
+
     return 0;
 }

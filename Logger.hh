@@ -59,10 +59,9 @@ public:
         // if(error_code ==8)
         message += " | Client IP: " + std::string(inet_ntoa(client_addr.sin_addr)) + " Port: " + std::to_string(ntohs(client_addr.sin_port));
         // Format the log message
-        log_stream_ << "[" << time_buf << "]"
-                    << "[" << LogLevelToString(level) << "]"
-                    << "[" << location.file_name() << ":" << location.line() << " " << location.function_name() << "]"
-                    << " " << message << std::endl; // std::endl also flushes the stream forces to write immediately to file
+        log_stream_ <<"["<< time_buf << "]" <<"["<< LogLevelToString(level) << "]"
+                    <<"["<< location.file_name() << ":" << location.line() << " " 
+                    << location.function_name() << "]" <<" " << message << "\n"; 
     }
 private:
     // Private constructor to enforce Singleton pattern
@@ -98,9 +97,21 @@ std::unordered_map<int, std::string> Logger::ERRORS = {
     {9, "Invalid request"},
     {10, "Requested resource not allowed or not found"},
     {11,"TIME OUT receiving request from client"},
-    {12,"TIME OUT sending response to client"}
+    {12,"TIME OUT sending response to client"},
+    {13,"Client disconnected (closed the connection)"}
     // Add more error codes and messages as needed
 };
+// Plain data for one log call - no closure, so a thread_pool<LogEntry> never
+// type-erases or heap-allocates to store one (unlike a task's move_only_function).
+struct LogEntry {
+    int error_code;
+    struct sockaddr_in client_addr;
+    LogLevel level;
+    void operator()() const { // lets thread_pool<LogEntry> treat this like any other Item
+        Logger::getInstance("Logs.txt").add_log(error_code, client_addr, level);
+    }
+};
+
 // A simple macro to make logging even easier
 #define LOG_INFO(msg) Logger::getInstance().log(msg, LogLevel::INFO)
 #define LOG_WARNING(msg) Logger::getInstance().log(msg, LogLevel::WARNING)
