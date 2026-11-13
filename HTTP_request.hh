@@ -7,6 +7,7 @@
 #include "CONFIGS.hh"
 #include<cmath>
 #include<chrono>
+#include<csignal>
 #include <expected>
 namespace utils{
     inline std::string_view trim(std::string_view s) {
@@ -44,12 +45,20 @@ namespace utils{
         if( std::chrono::steady_clock::now()  - start_time >= timeout_duration ) return true ; // timeed out
         return false;
     }
-    void configure_socket(int client_fd){
-        int block{0};
-        if constexpr( BLOCK_SIG_PIPE == 1){
-            block=1;
-        }
-        setsockopt(client_fd,SOL_SOCKET,SO_NOSIGPIPE,&block,sizeof(block));
+    // void configure_socket(int client_fd){
+    //     int block{0};
+    //     if constexpr( BLOCK_SIG_PIPE == 1){
+    //         block=1;
+    //     }
+    //     ssize_t status = setsockopt(client_fd,SOL_SOCKET,SO_NOSIGPIPE,&block,sizeof(block));
+    //     if(status == -1 ){
+    //         if(errno == SIGPIPE)
+    //     }
+    // }
+    void signal_handlers(){
+        // is just so happened that if client send RST to our server the kernal marks the
+        // //clint socket as close and calling send on it generate SIGPIPE and  by defaul it kill our serer so we make it ognore
+        signal(SIGPIPE,SIG_IGN); // ignore SIGPIPE siganl
     }
     std::expected<bool,int> try_send_all(int fd,const char* buffer,size_t buff_size,int total_sending_time){
         size_t offset{};
@@ -152,7 +161,7 @@ public:
                         }
                         if(received_bytes ==0)// client closed connection
                             return std::unexpected(1);
-                        if( utils::check_timeout(std::chrono::steady_clock::now(), std::chrono::seconds(REQUEST_TIMEOUT)) ){
+                        if( utils::check_timeout(start_time, std::chrono::seconds(REQUEST_TIMEOUT)) ){
                             return std::unexpected(11);
                         }
                         request.append(buffer,received_bytes);

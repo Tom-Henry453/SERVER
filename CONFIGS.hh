@@ -11,6 +11,7 @@
 #define DEFAULT_RECV_TIMEOUT_SEC 3 // time out limit for the client
 #define DEFAULT_SEND_TIMEOUT_SEC 2
 #define REQUEST_TIMEOUT 8          // 8 seconds to receive the request from the client
+#define RESPONSE_TIMEOUT 8         // 8 seconds to send the whole response to the client
 // HTTP Methods and other related constants
 inline const std::unordered_set<std::string_view> ALLOWED_METHODS = {"GET"};
 enum class SUPPORTED_HTTP_METHODS{

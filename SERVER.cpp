@@ -131,10 +131,21 @@ std::string build_http_response(STATUS_CODES status= STATUS_CODES::OK, const std
     return response;
 }
 
+// Sends the whole response with try_send_all. On failure it logs why
+// (12 = response deadline passed, 13 = client gone) and returns false.
+// The caller still owns client_fd and closes it.
+bool send_response(int client_fd, const std::string& response, const struct sockaddr_in& client_addr, Logger& logs){
+    auto sent = utils::try_send_all(client_fd, response.data(), response.size(), RESPONSE_TIMEOUT);
+    if(!sent){
+        logs.add_log(sent.error(), client_addr, LogLevel::ERROR);
+        return false;
+    }
+    return true;
+}
+
 void handle_client(int client_fd, const struct sockaddr_in& client_addr, Logger& logs){
     // set timeout on the client socket to mitigate slowris attacks
      utils::set_socket_timeout(client_fd,DEFAULT_RECV_TIMEOUT_SEC,DEFAULT_SEND_TIMEOUT_SEC);
-     utils::configure_socket(client_fd);
     auto raw_request = http_request::receive_request(client_fd);
     if(!raw_request){
         close(client_fd);
@@ -154,7 +165,7 @@ void handle_client(int client_fd, const struct sockaddr_in& client_addr, Logger&
             bad_method ? STATUS_CODES::NOT_FOUND : STATUS_CODES::BAD_REQUEST,
             bad_method ? "404 Not Found" : "400 Bad Request",
             "text/plain");
-        send(client_fd, err_resp.c_str(), err_resp.size(), 0);
+        send_response(client_fd, err_resp, client_addr, logs);
         close(client_fd);
         return;
     }
@@ -163,7 +174,7 @@ void handle_client(int client_fd, const struct sockaddr_in& client_addr, Logger&
     if(!requested_file_path_opt){
         logs.add_log(10, client_addr, LogLevel::ERROR);
         std::string err_resp = build_http_response(STATUS_CODES::NOT_FOUND, "404 Not Found", "text/plain");
-        send(client_fd, err_resp.c_str(), err_resp.size(), 0);
+        send_response(client_fd, err_resp, client_addr, logs);
         close(client_fd);
         return;
     }
@@ -171,13 +182,13 @@ void handle_client(int client_fd, const struct sockaddr_in& client_addr, Logger&
     if(!open_file(requested_file_path_opt.value(), file_buffer)){
         logs.add_log(10, client_addr, LogLevel::ERROR);
         std::string err_resp = build_http_response(STATUS_CODES::NOT_FOUND, "404 Not Found", "text/plain");
-        send(client_fd, err_resp.c_str(), err_resp.size(), 0);
+        send_response(client_fd, err_resp, client_addr, logs);
         close(client_fd);
         return;
     }
     std::string mime_type = get_mime_type(requested_file_path_opt.value());
     string final_response = build_http_response(STATUS_CODES::OK, file_buffer, mime_type);
-    send(client_fd, final_response.c_str(), final_response.size(), 0);
+    send_response(client_fd, final_response, client_addr, logs);
     close(client_fd);
     return ;
 }
@@ -217,6 +228,7 @@ int main() {
         cerr << "Error starting server: "<<e.what()<< endl;
         return 1;
     }
+    utils::signal_handlers();
     #if DEBUG_MODE
     std::cout<<"Waiting for a client to connect...\n";
     #endif
